@@ -50,7 +50,10 @@ products.forEach((product) => {
           data-product-id="${product.id}">
             Add to Cart
           </button>
-        </div> `;
+          <br>
+           <div class= "added-message-${product.id} added-to-cart"> Added </div> 
+        </div>
+       `;
 });
 
 document.querySelector('.js-product-grid').innerHTML = productsHTML;
@@ -58,7 +61,7 @@ document.querySelector('.js-product-grid').innerHTML = productsHTML;
 document.querySelectorAll('.js-add-to-cart')
 .forEach((button) => {
     button.addEventListener('click', ()=>{
-       const productId = button.dataset.productId;
+       const {productId} = button.dataset;
 
        let matchingItem;
        
@@ -76,8 +79,8 @@ document.querySelectorAll('.js-add-to-cart')
         }
         else{
         cart.push({
-        productId : productId,
-        quantity : quantity
+        productId,
+        quantity
        });
         }
 
@@ -92,5 +95,29 @@ document.querySelectorAll('.js-add-to-cart')
     });
 
 })
+const timeoutIds = {};
+
+document.querySelectorAll('.js-add-to-cart')
+.forEach((button) => {
+  button.addEventListener('click', () => {
+    const productId = button.dataset.productId;
+    const messageEl = document.querySelector(
+      `.added-message-${productId}`
+    );
+
+    messageEl.classList.add('added-visible');
+
+    // 🔁 Clear previous timeout
+    if (timeoutIds[productId]) {
+      clearTimeout(timeoutIds[productId]);
+    }
+
+    // ⏱ Hide after 2 seconds
+    timeoutIds[productId] = setTimeout(() => {
+      messageEl.classList.remove('added-visible');
+    }, 2000);
+  });
+});
+
 
 

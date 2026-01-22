@@ -15,6 +15,35 @@ const products = [
     ]
   },
   {
+    id: "15b6fc6f-327a-4ec4-896f-486349e85a3d001",
+    image: "images/products/bluetooth-led-strip-light.jpg",
+    name: "Bluetooth LED Strip Light",
+    rating: {
+      stars: 4.5,
+      count: 290
+    },
+    priceCents: 195,
+    keywords: [
+      "light",
+      "decoration"
+    ]
+  }, {
+   id: "amazon00000000000000000001" ,
+    image: "images/products/cultery-set.jpg" ,
+    name: "Gold Cultery Set" ,
+    rating: {
+      stars: 5,
+      count: 90
+    },
+    priceCents: 1999,
+    keywords: [
+      "dining set",
+      "spoon",
+      "cultery"
+    ]
+  },
+  
+  {
     id: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
     image: "images/products/intermediate-composite-basketball.jpg",
     name: "Intermediate Size Basketball",
@@ -28,6 +57,7 @@ const products = [
       "basketballs"
     ]
   },
+  
   {
     id: "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
     image: "images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg",
@@ -133,6 +163,21 @@ const products = [
     keywords: [
       "bathroom",
       "cleaning"
+    ]
+  },
+   {
+   id: "amazon0012006ijs00006700000001" ,
+    image: "images/products/double-door-fridge.jpg" ,
+    name: "LG Double Door Fridge" ,
+    rating: {
+      stars: 4.5,
+      count: 290
+    },
+    priceCents: 150999,
+    keywords: [
+      "dining set",
+      "spoon",
+      "cultery"
     ]
   },
   {

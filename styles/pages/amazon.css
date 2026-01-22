@@ -154,3 +154,15 @@
   padding: 8px;
   border-radius: 50px;
 }
+
+.added-to-cart {
+  opacity: 0;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s;
+}
+
+.added-visible {
+  opacity: 1;
+}
+
