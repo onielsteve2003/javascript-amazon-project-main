@@ -1,3 +1,5 @@
+import { cart } from "./cart.js";
+//double dots if its in another folder
 
 let productsHTML = ''
  
