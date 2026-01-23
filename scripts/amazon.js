@@ -1,4 +1,4 @@
-import { cart } from "./cart.js";
+import { cart, addToCart } from "./cart.js";
 import {products} from "../data/products.js"
 //double dots if its in another folder
 
@@ -61,28 +61,6 @@ products.forEach((product) => {
 
 document.querySelector('.js-product-grid').innerHTML = productsHTML;
 
-function addToCart(productId){
-  let matchingItem;
-       
-       cart.forEach((item)=>{
-        if(productId === item.productId){
-          matchingItem = item
-        }
-        })
-
-        const quantitySelector = document.querySelector(`.quantity-option-${productId}`)
-        const quantity = Number(quantitySelector.value)
-
-        if(matchingItem){
-          matchingItem.quantity += quantity;
-        }
-        else{
-        cart.push({
-        productId,
-        quantity
-       });
-        }
-}
 
 function updateCartQuantity(){
     let cartQuantity = 0;
