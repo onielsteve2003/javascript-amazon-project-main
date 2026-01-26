@@ -1,6 +1,8 @@
-import {cart, removeProduct, calculateCartQuantity} from "./cart.js"
+import {cart, removeProduct, calculateCartQuantity, updateQuantity} from "./cart.js"
 import {products} from "../data/products.js"
 import { formatCurrency } from "../utilities/money.js"
+
+
 
 function updateCartQuantity(){
 let cartQuantity = calculateCartQuantity();
@@ -42,11 +44,27 @@ products.forEach((product) => {
         </div>
         <div class="product-quantity">
             <span>
-            Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+            Quantity: <span class="js-quantity-label">${cartItem.quantity}</span>
             </span>
-            <span class="update-quantity-link link-primary">
+           
+             <span
+            class="update-quantity-link js-update-link link-primary"
+            data-product-id="${matchingProduct.id}">
             Update
             </span>
+
+            <input
+            class="quantity-input"
+            type="number"
+            min="1">
+
+            <span
+            class="save-quantity-link link-primary js-save-link"
+            data-product-id="${matchingProduct.id}">
+            Save
+            </span>
+
+
             <span class="delete-quantity-link js-delete-link link-primary"
              data-product-id="${matchingProduct.id}">
             Delete
@@ -107,6 +125,49 @@ products.forEach((product) => {
 
 
 document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
+
+
+document.querySelectorAll('.js-update-link').forEach((link) => {
+  link.addEventListener('click', () => {
+    const container = link.closest('.cart-item-container');
+    container.classList.add('is-editing-quantity');
+  });
+});
+// LIVE preview of quantity before saving
+document.querySelectorAll('.quantity-input').forEach(input => {
+    input.addEventListener('input', (e) => {
+        const container = input.closest('.cart-item-container');
+        const newQuantity = Number(input.value);
+
+        if (newQuantity < 1 || Number.isNaN(newQuantity)) return;
+
+        // update the quantity label live as the user changes it
+        container.querySelector('.js-quantity-label').textContent = newQuantity;
+    });
+});
+
+
+document.querySelectorAll('.js-save-link').forEach((link) => {
+  link.addEventListener('click', () => {
+    const productId = link.dataset.productId;
+    const container = link.closest('.cart-item-container');
+    const input = container.querySelector('.quantity-input');
+    const newQuantity = Number(input.value);
+
+     if (newQuantity < 1 || Number.isNaN(newQuantity)) {
+      return;
+    }
+
+    updateQuantity(productId, newQuantity);
+
+    container.querySelector('.js-quantity-label').innerHTML = newQuantity;
+    container.classList.remove('is-editing-quantity');
+
+    updateCartQuantity();
+  });
+});
+
+
 document.querySelectorAll('.js-delete-link').forEach((link) =>{
     link.addEventListener('click', ()=>{
         const productId = link.dataset.productId
@@ -116,5 +177,12 @@ document.querySelectorAll('.js-delete-link').forEach((link) =>{
    const container = document.querySelector(`.js-cart-container-${productId}`)
 
    container.remove()
+    })
+})
+
+document.querySelectorAll('.js-update-link').forEach((link) => {
+    link.addEventListener('click', ()=>{
+        const productId = link.dataset.productId
+        console.log(productId)
     })
 })
