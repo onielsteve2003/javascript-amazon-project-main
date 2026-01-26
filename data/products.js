@@ -15,7 +15,7 @@
     ]
   },
   {
-    id: "15b6fc6f-327a-4ec4-896f-486349e85a3d001",
+    id: "15b6fc6f-327a-4ec4-896f-486349e85b6d",
     image: "images/products/bluetooth-led-strip-light.jpg",
     name: "Bluetooth LED Strip Light",
     rating: {
