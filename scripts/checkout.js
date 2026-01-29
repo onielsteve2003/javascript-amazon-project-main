@@ -8,6 +8,9 @@ const today = dayjs();
 const expectedTime = today.add(7, 'days')
 console.log(expectedTime.format('dddd, MMMM D'))
 
+
+function renderOrderSummary(){
+
 function updateCartQuantity(){
 let cartQuantity = calculateCartQuantity();
  document.querySelector('.js-checkout-page').innerHTML = `${cartQuantity} items`
@@ -216,6 +219,7 @@ document.querySelectorAll('.js-delivery-option').forEach((element)=>{
     element.addEventListener('click', ()=>{
         const{productId, deliveryOptionId} = element.dataset
         updateDeliveryOption(productId, deliveryOptionId)
+        renderOrderSummary()
     })
 })
 
@@ -239,3 +243,6 @@ function calculatePaymentSummary() {
 
     return { itemsTotal, shippingTotal, subtotal, tax, total };
 }
+}
+
+renderOrderSummary();
