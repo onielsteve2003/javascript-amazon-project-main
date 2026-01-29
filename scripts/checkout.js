@@ -150,6 +150,27 @@ function deliveryOptionsHTML(matchingProduct, cartItem){
     return html
 }
 
+function calculatePaymentSummary() {
+    let itemsTotal = 0;
+    let shippingTotal = 0; // you can make this dynamic per item if needed
+    const taxRate = 0.1; // 10%
+
+    cart.forEach(cartItem => {
+        const product = products.find(p => p.id === cartItem.productId);
+        if (!product) return;
+
+        itemsTotal += (product.priceCents / 100) * cartItem.quantity; // convert cents to dollars
+        // Optional: add shipping per item if needed
+        shippingTotal += 4.99; // example flat rate per item
+    });
+
+    const subtotal = itemsTotal + shippingTotal;
+    const tax = subtotal * taxRate;
+    const total = subtotal + tax;
+
+    return { itemsTotal, shippingTotal, subtotal, tax, total };
+}
+
 
 document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 
@@ -223,26 +244,7 @@ document.querySelectorAll('.js-delivery-option').forEach((element)=>{
     })
 })
 
-function calculatePaymentSummary() {
-    let itemsTotal = 0;
-    let shippingTotal = 0; // you can make this dynamic per item if needed
-    const taxRate = 0.1; // 10%
 
-    cart.forEach(cartItem => {
-        const product = products.find(p => p.id === cartItem.productId);
-        if (!product) return;
-
-        itemsTotal += (product.priceCents / 100) * cartItem.quantity; // convert cents to dollars
-        // Optional: add shipping per item if needed
-        shippingTotal += 4.99; // example flat rate per item
-    });
-
-    const subtotal = itemsTotal + shippingTotal;
-    const tax = subtotal * taxRate;
-    const total = subtotal + tax;
-
-    return { itemsTotal, shippingTotal, subtotal, tax, total };
-}
 }
 
 renderOrderSummary();
