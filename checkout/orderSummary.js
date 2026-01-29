@@ -10,11 +10,7 @@ import { products, getProduct } from "../data/products.js";
 import { formatCurrency } from "../utilities/money.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 import { deliveryOptions, getDeliveryOption } from "../data/deliveryOptions.js";
-
-
-const today = dayjs();
-const expectedTime = today.add(7, 'days')
-console.log(expectedTime.format('dddd, MMMM D'))
+import { renderPaymentSummary } from "./paymentSummary.js";
 
 
 export function renderOrderSummary(){
@@ -209,7 +205,9 @@ document.querySelectorAll('.js-save-link').forEach((link) => {
     container.classList.remove('is-editing-quantity');
 
     updateCartQuantity();
+    renderPaymentSummary()
   });
+  
 });
 
 
@@ -222,6 +220,8 @@ document.querySelectorAll('.js-delete-link').forEach((link) =>{
    const container = document.querySelector(`.js-cart-container-${productId}`)
 
    container.remove()
+
+   renderPaymentSummary()
     })
 })
 
@@ -237,6 +237,7 @@ document.querySelectorAll('.js-delivery-option').forEach((element)=>{
         const{productId, deliveryOptionId} = element.dataset
         updateDeliveryOption(productId, deliveryOptionId)
         renderOrderSummary()
+        renderPaymentSummary()
     })
 })
 
