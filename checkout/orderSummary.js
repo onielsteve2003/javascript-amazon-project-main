@@ -12,6 +12,26 @@ import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 import { deliveryOptions, getDeliveryOption } from "../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
 
+function isWeekend(date) {
+  return date.format('d') === '0' || date.format('d') === '6';
+}
+
+function calculateDeliveryDate(deliveryDays) {
+  let date = dayjs(); // today
+  let remainingDays = deliveryDays;
+
+  while (remainingDays > 0) {
+    date = date.add(1, 'day'); // move to next day
+
+    if (!isWeekend(date)) {
+      remainingDays--;
+    }
+  }
+
+  return date;
+}
+
+
 
 export function renderOrderSummary(){
 
@@ -34,12 +54,11 @@ const deliveryOptionId = cartItem.deliveryOptionsId;
 
 const deliveryOption = getDeliveryOption(deliveryOptionId);
 
-   const today = dayjs();
-        const deliveryDate = today.add(
-            deliveryOption.deliveryDays, 'days'
-        );
+  const deliveryDate = calculateDeliveryDate(
+  deliveryOption.deliveryDays
+);
 
-     const dateString = deliveryDate.format(`dddd, MMMM D`);
+ const dateString = deliveryDate.format(`dddd, MMMM D`);
 
 
  cartSummaryHTML +=   `
@@ -105,10 +124,9 @@ function deliveryOptionsHTML(matchingProduct, cartItem){
     let html = '';
     
     deliveryOptions.forEach((deliveryOption)=>{
-        const today = dayjs();
-        const deliveryDate = today.add(
-            deliveryOption.deliveryDays, 'days'
-        );
+        const deliveryDate = calculateDeliveryDate(
+            deliveryOption.deliveryDays
+            );
 
         const dateString = deliveryDate.format(`dddd, MMMM D`)
 
@@ -171,21 +189,25 @@ document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 document.querySelectorAll('.js-update-link').forEach((link) => {
   link.addEventListener('click', () => {
     const container = link.closest('.cart-item-container');
+    const quantityLabel = container.querySelector('.js-quantity-label');
+    const input = container.querySelector('.quantity-input');
+
+    // Start input from current quantity
+    input.value = quantityLabel.textContent.trim();
+
     container.classList.add('is-editing-quantity');
+
+    // ✅ Add live update listener
+    input.addEventListener('input', () => {
+      // Make sure only numbers show up
+      const value = input.value.replace(/\D/g, '');
+      input.value = value; // sanitize input
+      quantityLabel.textContent = value; // update label live
+    });
   });
 });
-// LIVE preview of quantity before saving
-document.querySelectorAll('.quantity-input').forEach(input => {
-    input.addEventListener('input', (e) => {
-        const container = input.closest('.cart-item-container');
-        const newQuantity = Number(input.value);
 
-        if (newQuantity < 1 || Number.isNaN(newQuantity)) return;
 
-        // update the quantity label live as the user changes it
-        container.querySelector('.js-quantity-label').textContent = newQuantity;
-    });
-});
 
 
 document.querySelectorAll('.js-save-link').forEach((link) => {
