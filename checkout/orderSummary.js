@@ -135,7 +135,9 @@ function deliveryOptionsHTML(matchingProduct, cartItem){
         :`$${formatCurrency(deliveryOption.priceCents)} -`;
 
 
-        const isChecked = deliveryOption.id === cartItem.deliveryOptionsId
+  const isChecked = deliveryOption.id === (cartItem.deliveryOptionsId || 
+    getDeliveryOption(null).id);
+
 
       html +=  ` <div class="delivery-option js-delivery-option"
                 data-product-id="${matchingProduct.id}"
@@ -159,28 +161,6 @@ function deliveryOptionsHTML(matchingProduct, cartItem){
 
     return html
 }
-
-function calculatePaymentSummary() {
-    let itemsTotal = 0;
-    let shippingTotal = 0; // you can make this dynamic per item if needed
-    const taxRate = 0.1; // 10%
-
-    cart.forEach(cartItem => {
-        const product = products.find(p => p.id === cartItem.productId);
-        if (!product) return;
-
-        itemsTotal += (product.priceCents / 100) * cartItem.quantity; // convert cents to dollars
-        // Optional: add shipping per item if needed
-        shippingTotal += 4.99; // example flat rate per item
-    });
-
-    const subtotal = itemsTotal + shippingTotal;
-    const tax = subtotal * taxRate;
-    const total = subtotal + tax;
-
-    return { itemsTotal, shippingTotal, subtotal, tax, total };
-}
-
 
 document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 
@@ -255,13 +235,29 @@ document.querySelectorAll('.js-update-link').forEach((link) => {
 })
 
 document.querySelectorAll('.js-delivery-option').forEach((element)=>{
-    element.addEventListener('click', ()=>{
-        const{productId, deliveryOptionId} = element.dataset
-        updateDeliveryOption(productId, deliveryOptionId)
-        renderOrderSummary()
-        renderPaymentSummary()
-    })
-})
+  element.addEventListener('click', ()=>{
+    const { productId, deliveryOptionId } = element.dataset;
+
+    // Update the delivery option in memory
+    updateDeliveryOption(productId, deliveryOptionId);
+
+    // ✅ Update the radio buttons locally
+    const inputs = document.querySelectorAll(`input[name="delivery-option-${productId}"]`);
+    inputs.forEach(input => input.checked = input.value === deliveryOptionId);
+
+    // ✅ Update the delivery date for this specific item
+    const container = document.querySelector(`.js-cart-container-${productId}`);
+    const selectedOption = getDeliveryOption(deliveryOptionId);
+    const deliveryDate = calculateDeliveryDate(selectedOption.deliveryDays);
+    const dateString = deliveryDate.format(`dddd, MMMM D`);
+    const dateElement = container.querySelector('.delivery-date');
+    dateElement.textContent = `Delivery date: ${dateString}`;
+
+    // Recalculate totals
+    renderPaymentSummary();
+  });
+});
+
 
 
 }

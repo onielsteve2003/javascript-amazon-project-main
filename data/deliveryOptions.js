@@ -13,13 +13,11 @@ export const deliveryOptions = [{
 }]
 
 export function getDeliveryOption(deliveryOptionId) {
-   let deliveryOption;
+  if (!deliveryOptionId) {
+    // Default to free delivery if available
+    const freeOption = deliveryOptions.find(option => option.priceCents === 0);
+    return freeOption || deliveryOptions[0];
+  }
 
-    deliveryOptions.forEach((option)=>{
-    if (option.id === deliveryOptionId){
-        deliveryOption = option;
-    }
-});
-
-return deliveryOption || deliveryOptions[0]
+  return deliveryOptions.find(option => option.id === deliveryOptionId) || deliveryOptions[0];
 }
