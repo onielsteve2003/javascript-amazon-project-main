@@ -53,19 +53,21 @@ export function addToCart(productId){
         }
         });
 
-        const quantitySelector = document.querySelector(`.quantity-option-${productId}`)
-        const quantity = Number(quantitySelector.value)
-
-        if(matchingItem){
-          matchingItem.quantity += quantity;
-          console.log(matchingItem.quantity)
+            let quantity = 1;
+        const quantitySelector = document.querySelector(`.quantity-option-${productId}`);
+        if (quantitySelector && quantitySelector.value) {
+          quantity = Number(quantitySelector.value);
         }
-        else{
-        cart.push({
-        productId,
-        quantity,
-        deliveryOptionId: '1'
-       });
+
+        if (matchingItem) {
+          matchingItem.quantity += quantity;
+          // console.log(matchingItem.quantity)
+        } else {
+          cart.push({
+            productId,
+            quantity,
+            deliveryOptionId: '1'
+          });
         }
         saveToStorage();
 }
