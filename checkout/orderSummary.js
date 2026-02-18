@@ -35,12 +35,16 @@ function calculateDeliveryDate(deliveryDays) {
 
 export function renderOrderSummary(){
 
-function updateCartQuantity(){
-let cartQuantity = calculateCartQuantity();
- document.querySelector('.js-checkout-page').innerHTML = `${cartQuantity} items`
-}
 
-updateCartQuantity();
+  function updateCartQuantity() {
+    let cartQuantity = calculateCartQuantity();
+    const checkoutPageEl = document.querySelector('.js-checkout-page');
+    if (checkoutPageEl) {
+      checkoutPageEl.innerHTML = `${cartQuantity} items`;
+    }
+  }
+
+  updateCartQuantity();
 
 let cartSummaryHTML = '';
 
