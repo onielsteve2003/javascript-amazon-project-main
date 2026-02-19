@@ -9,7 +9,9 @@ class Cart{
 
      }
 
-        loadFromStorage(){
+
+     //to make a method private, put hashtag
+    loadFromStorage(){
     this.cartItems = JSON.parse(localStorage.getItem(this.localStorageKey))
 
     if (!this.cartItems){

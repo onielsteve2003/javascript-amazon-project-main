@@ -35,10 +35,13 @@ function calculateDeliveryDate(deliveryDays) {
 
 export function renderOrderSummary(){
 
-function updateCartQuantity(){
-let cartQuantity = calculateCartQuantity();
- document.querySelector('.js-checkout-page').innerHTML = `${cartQuantity} items`
-}
+function updateCartQuantity() {
+    let cartQuantity = calculateCartQuantity();
+    const checkoutPageEl = document.querySelector('.js-checkout-page');
+    if (checkoutPageEl) {
+      checkoutPageEl.innerHTML = `${cartQuantity} items`;
+    }
+  }
 
 updateCartQuantity();
 
@@ -76,7 +79,7 @@ const deliveryOption = getDeliveryOption(deliveryOptionId);
             ${matchingProduct.name}
         </div>
         <div class="product-price">
-            $${formatCurrency(matchingProduct.priceCents)}
+           ${matchingProduct.getPrice()}
         </div>
         <div class="product-quantity">
             <span>
