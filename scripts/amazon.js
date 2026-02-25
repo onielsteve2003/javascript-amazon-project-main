@@ -1,115 +1,118 @@
 import { cart, addToCart, calculateCartQuantity } from "./cart.js";
-import {products} from "../data/products.js"
+import {products, loadProducts} from "../data/products.js"
 //double dots if its in another folder
 import {formatCurrency} from "../utilities/money.js";
 
+loadProducts(renderProductsGrid);
 
-let productsHTML = ''
- 
-products.forEach((product) => {
-    productsHTML +=   ` <div class="product-container">
-          <div class="product-image-container">
-            <img class="product-image"
-              src="${product.image}">
-          </div>
+function renderProductsGrid(){
 
-          <div class="product-name limit-text-to-2-lines">
-         ${product.name}
-          </div>
-
-          <div class="product-rating-container">
-            <img class="product-rating-stars"
-              src="${product.getStarsUrl()}">
-            <div class="product-rating-count link-primary">
-              ${product.rating.count}
+  let productsHTML = ''
+  
+  products.forEach((product) => {
+      productsHTML +=   ` <div class="product-container">
+            <div class="product-image-container">
+              <img class="product-image"
+                src="${product.image}">
             </div>
+
+            <div class="product-name limit-text-to-2-lines">
+          ${product.name}
+            </div>
+
+            <div class="product-rating-container">
+              <img class="product-rating-stars"
+                src="${product.getStarsUrl()}">
+              <div class="product-rating-count link-primary">
+                ${product.rating.count}
+              </div>
+            </div>
+
+            <div class="product-price">
+              ${product.getPrice()}
+            </div>
+
+            <div class="product-quantity-container">
+              <select class="quantity-option-${product.id}">
+                <option selected value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+
+            ${product.extraInfoHTML()}
+
+            <div class="product-spacer"></div>
+
+            <div class="added-to-cart">
+              <img src="images/icons/checkmark.png">
+              Added
+            </div>
+
+            <button class="add-to-cart-button button-primary js-add-to-cart"
+            data-product-id="${product.id}">
+              Add to Cart
+            </button>
+            <br>
+            <div class= "added-message-${product.id} added-to-cart"> Added </div> 
           </div>
-
-          <div class="product-price">
-            ${product.getPrice()}
-          </div>
-
-          <div class="product-quantity-container">
-            <select class="quantity-option-${product.id}">
-              <option selected value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-            </select>
-          </div>
-
-          ${product.extraInfoHTML()}
-
-          <div class="product-spacer"></div>
-
-          <div class="added-to-cart">
-            <img src="images/icons/checkmark.png">
-            Added
-          </div>
-
-          <button class="add-to-cart-button button-primary js-add-to-cart"
-          data-product-id="${product.id}">
-            Add to Cart
-          </button>
-          <br>
-           <div class= "added-message-${product.id} added-to-cart"> Added </div> 
-        </div>
-       `;
-});
-
-document.querySelector('.js-product-grid').innerHTML = productsHTML;
-
-updateCartQuantity();
-
-  function updateCartQuantity(){
-    let cartQuantity = calculateCartQuantity();
-
-        document.querySelector('.js-cart-quantity').innerHTML = `${cartQuantity}`;
-}
-
-updateCartQuantity();
-
-
-document.querySelectorAll('.js-add-to-cart')
-.forEach((button) => {
-    button.addEventListener('click', ()=>{
-       const {productId} = button.dataset;
-
-         addToCart(productId);
-         updateCartQuantity();
-      
-    });
-
-})
-const timeoutIds = {};
-
-document.querySelectorAll('.js-add-to-cart')
-.forEach((button) => {
-  button.addEventListener('click', () => {
-    const productId = button.dataset.productId;
-    const messageEl = document.querySelector(
-      `.added-message-${productId}`
-    );
-
-    messageEl.classList.add('added-visible');
-
-    // 🔁 Clear previous timeout
-    if (timeoutIds[productId]) {
-      clearTimeout(timeoutIds[productId]);
-    }
-
-    // ⏱ Hide after 2 seconds
-    timeoutIds[productId] = setTimeout(() => {
-      messageEl.classList.remove('added-visible');
-    }, 2000);
+        `;
   });
-});
+
+  document.querySelector('.js-product-grid').innerHTML = productsHTML;
+
+  updateCartQuantity();
+
+    function updateCartQuantity(){
+      let cartQuantity = calculateCartQuantity();
+
+          document.querySelector('.js-cart-quantity').innerHTML = `${cartQuantity}`;
+  }
+
+  updateCartQuantity();
 
 
+  document.querySelectorAll('.js-add-to-cart')
+  .forEach((button) => {
+      button.addEventListener('click', ()=>{
+        const {productId} = button.dataset;
+
+          addToCart(productId);
+          updateCartQuantity();
+        
+      });
+
+  })
+  const timeoutIds = {};
+
+  document.querySelectorAll('.js-add-to-cart')
+  .forEach((button) => {
+    button.addEventListener('click', () => {
+      const productId = button.dataset.productId;
+      const messageEl = document.querySelector(
+        `.added-message-${productId}`
+      );
+
+      messageEl.classList.add('added-visible');
+
+      // 🔁 Clear previous timeout
+      if (timeoutIds[productId]) {
+        clearTimeout(timeoutIds[productId]);
+      }
+
+      // ⏱ Hide after 2 seconds
+      timeoutIds[productId] = setTimeout(() => {
+        messageEl.classList.remove('added-visible');
+      }, 2000);
+    });
+  });
+
+}
 

@@ -33,7 +33,7 @@ function calculateDeliveryDate(deliveryDays) {
 
 
 
-export function renderOrderSummary(){
+export function renderOrderSummary(products){
 
 function updateCartQuantity() {
     let cartQuantity = calculateCartQuantity();
