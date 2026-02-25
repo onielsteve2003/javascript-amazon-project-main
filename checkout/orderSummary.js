@@ -43,7 +43,15 @@ function updateCartQuantity() {
     }
   }
 
-updateCartQuantity();
+  function updateCartQuantity() {
+    let cartQuantity = calculateCartQuantity();
+    const checkoutPageEl = document.querySelector('.js-checkout-page');
+    if (checkoutPageEl) {
+      checkoutPageEl.innerHTML = `${cartQuantity} items`;
+    }
+  }
+
+  updateCartQuantity();
 
 let cartSummaryHTML = '';
 
