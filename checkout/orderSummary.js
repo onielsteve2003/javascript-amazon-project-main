@@ -56,21 +56,17 @@ function updateCartQuantity() {
 let cartSummaryHTML = '';
 
 cart.forEach((cartItem)=>{
-    const productId = cartItem.productId
+     const productId = cartItem.productId;
+    const matchingProduct = getProduct(productId);
+    if (!matchingProduct) {
+    // Skip rendering this cart item if product is not found (test safety)
+    return;
+    }
 
-
-const matchingProduct = getProduct(productId);
-
-const deliveryOptionId = cartItem.deliveryOptionsId;
-
-const deliveryOption = getDeliveryOption(deliveryOptionId);
-
-  const deliveryDate = calculateDeliveryDate(
-  deliveryOption.deliveryDays
-);
-
- const dateString = deliveryDate.format(`dddd, MMMM D`);
-
+    const deliveryOptionId = cartItem.deliveryOptionsId;
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
+    const deliveryDate = calculateDeliveryDate(deliveryOption.deliveryDays);
+    const dateString = deliveryDate.format(`dddd, MMMM D`);
 
  cartSummaryHTML +=   `
 <div class="cart-item-container js-cart-container-${matchingProduct.id}">
@@ -79,15 +75,18 @@ const deliveryOption = getDeliveryOption(deliveryOptionId);
     </div>
 
     <div class="cart-item-details-grid">
-        <img class="product-image"
-        src="${matchingProduct.image}">
 
-        <div class="cart-item-details">
-        <div class="product-name">
-            ${matchingProduct.name}
-        </div>
-        <div class="product-price">
-           ${matchingProduct.getPrice()}
+
+          <img class="product-image"
+      src="${matchingProduct.image}">
+
+      <div class="cart-item-details">
+      <div class="product-name">
+        ${matchingProduct.name}
+      </div>
+      <div class="product-price">
+         ${matchingProduct.getPrice()}
+         
         </div>
         <div class="product-quantity">
             <span>

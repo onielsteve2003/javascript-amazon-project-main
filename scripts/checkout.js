@@ -6,7 +6,7 @@ import { products, loadProducts } from "../data/products.js"
 
 
 loadProducts(()=>{
-     console.log("Products loaded:", products);
+    
     renderOrderSummary(products)
     renderPaymentSummary()
 })
